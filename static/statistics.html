@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Farm Weather</title>
+	<style>
+		body {
+			background-image: url('https://images7.alphacoders.com/118/1184570.jpg');
+			background-size: cover;
+		}
+		h1 {
+			color: white;
+			text-align: center;
+			margin-top: 50px;
+			font-size: 50px;
+			text-shadow: 2px 2px #555;
+		}
+		.btn {
+			background-color: #4CAF50;
+			color: white;
+			padding: 16px 32px;
+			text-align: center;
+			font-size: 16px;
+			margin: 20px;
+			cursor: pointer;
+			border: none;
+			border-radius: 5px;
+            display: inline-block; /* aggiunto */
+            margin-right: 10px; /* aggiunto */
+		}
+		.btn:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+	<h1>Farm Weather Statistics</h1>
+    <br><br>
+    <div style="text-align: center;">
+        <a href="/farm/sensor/average" class="btn">Average</a>
+        <a href="/farm/sensor/minimum" class="btn">Minimum</a>
+        <a href="/farm/sensor/maximum" class="btn">Maximum</a>
+    <br><br>
+        <div style="text-align: center;">
+		<a href="/main" class="btn">Main Page</a>
+		<a href="/logout" class="btn">Logout</a>
+	</div>
+    </div>
+</body>
+</html>
