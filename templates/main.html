@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Farm Weather</title>
+	<style>
+		body {
+			background-image: url('https://images5.alphacoders.com/111/1119534.jpg');
+			background-size: cover;
+		}
+		h1 {
+			color: white;
+			text-align: center;
+			margin-top: 50px;
+			font-size: 50px;
+			text-shadow: 2px 2px #555;
+		}
+		h2 {
+  			color: black;
+			text-align: center;
+			margin-top: 15px;
+			font-size: 30px;
+			text-shadow: 1px 1px #555;
+		}
+		p {
+  			color: black;
+			text-align: center;
+			margin-top: 15px;
+			font-size: 20px;
+			font-weight: bold;
+		}
+		input[type="text"], button {
+			display: inline-block;
+			vertical-align: middle;
+			margin: 5px;
+		}
+		.btn-container {
+			text-align: center;
+		}
+		.btn {
+			background-color: #4CAF50;
+			color: white;
+			padding: 8px 18px;
+			text-align: center;
+			font-size: 16px;
+			margin: 10px;
+			cursor: pointer;
+			border: none;
+			border-radius: 5px;
+		}
+		.btn:hover {
+			background-color: #3e8e41;
+		}
+		.row {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+		}
+		.col {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>Farm Weather</h1>
+	<h2>Welcome, {{username}}</h2>
+	<p>Enter threshold values to receive an alert:</p>
+	<div class="row">
+		<div class="col">
+			<p>MaxT:<input type="text" id="maxT-threshold">
+			<button class="btn" id="maxT-btn">Submit</button></p>
+		</div>
+		<div class="col">
+			<p>MinT:<input type="text" id="minT-threshold">
+			<button class="btn" id="minT-btn">Submit</button></p>
+		</div>
+		<div class="col">
+			<p>Wind Speed:<input type="text" id="windSpeed-threshold">
+			<button class="btn" id="windSpeed-btn">Submit</button></p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<p>Humidity:<input type="text" id="humidity-threshold">
+			<button class="btn" id="humidity-btn">Submit</button></p>
+		</div>
+		<div class="col">
+			<p>Precipitation:<input type="text" id="precipitation-threshold">
+			<button class="btn" id="precipitation-btn">Submit</button></p>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="btn-container">
+		<a href="/farm/sensor" class="btn">All Sensors</a>
+		<a href="/static/statistics.html" class="btn">Statistics</a>
+		<a href="/graph" class="btn">All Graphs</a>
+		<a href="/logout" class="btn">Logout</a>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#maxT-btn').click(function () {
+				var maxTThreshold = parseFloat($('#maxT-threshold').val());
+				if (isNaN(maxTThreshold)) {
+					alert('Please enter a valid number for the maximum temperature threshold!');
+					return;
+				}
+				$.ajax({
+					url: '/farm/sensor',
+					type: 'GET',
+					success: function (data) {
+						var readings = JSON.parse(data);
+						var i = 0;
+
+						function showAlert() {
+							if (i < readings.length) {
+								if (readings[i][1] > maxTThreshold) {
+									var confirmAlert = confirm('Alert, this day ' + readings[i][0] + ' a maximum temp of: ' + readings[i][1] + '! Do you want to continue receiving alerts for values that exceed the threshold?');
+									if (confirmAlert) {
+										i++;
+										showAlert();
+									}
+								} else {
+									i++;
+									showAlert();
+								}
+							} else {
+								var confirmAlert = confirm('No maximum temperature readings exceeded the threshold! Do you want to continue receiving alerts for values that exceed the threshold?');
+								if (confirmAlert) {
+									i = 0;
+									showAlert();
+								}
+							}
+						}
+
+						showAlert();
+					}
+				});
+			});
+			$('#minT-btn').click(function () {
+				var minTThreshold = parseFloat($('#minT-threshold').val());
+				if (isNaN(minTThreshold)) {
+					alert('Please enter a valid number for the minimum temperature threshold!');
+					return;
+				}
+				$.ajax({
+					url: '/farm/sensor',
+					type: 'GET',
+					success: function (data) {
+						var readings = JSON.parse(data);
+						var i = 0;
+
+						function showAlert() {
+							if (i < readings.length) {
+								if (readings[i][2] < minTThreshold) {
+									var confirmAlert = confirm('Alert, this day ' + readings[i][0] + ' a minimum temp of: ' + readings[i][2] + '! Do you want to continue receiving alerts for values that exceed the threshold?');
+									if (confirmAlert) {
+										i++;
+										showAlert();
+									}
+								} else {
+									i++;
+									showAlert();
+								}
+							} else {
+								var confirmAlert = confirm('No minimum temperature readings exceeded the threshold! Do you want to continue receiving alerts for values that exceed the threshold?');
+								if (confirmAlert) {
+									i = 0;
+									showAlert();
+								}
+							}
+						}
+
+						showAlert();
+					}
+				});
+			});
+			$('#windSpeed-btn').click(function () {
+				var windSpeedThreshold = parseFloat($('#windSpeed-threshold').val());
+				if (isNaN(windSpeedThreshold)) {
+					alert('Please enter a valid number for the Wind Speed threshold!');
+					return;
+				}
+				$.ajax({
+					url: '/farm/sensor',
+					type: 'GET',
+					success: function (data) {
+						var readings = JSON.parse(data);
+						var i = 0;
+
+						function showAlert() {
+							if (i < readings.length) {
+								if (readings[i][3] > windSpeedThreshold) {
+									var confirmAlert = confirm('Alert, this day ' + readings[i][0] + ' a wind speed of: ' + readings[i][3] + '! Do you want to continue receiving alerts for values that exceed the threshold?');
+									if (confirmAlert) {
+										i++;
+										showAlert();
+									}
+								} else {
+									i++;
+									showAlert();
+								}
+							} else {
+								var confirmAlert = confirm('No wind speed readings exceeded the threshold! Do you want to continue receiving alerts for values that exceed the threshold?');
+								if (confirmAlert) {
+									i = 0;
+									showAlert();
+								}
+							}
+						}
+
+						showAlert();
+					}
+				});
+			});
+			$('#humidity-btn').click(function () {
+				var humidityThreshold = parseFloat($('#humidity-threshold').val());
+				if (isNaN(humidityThreshold)) {
+					alert('Please enter a valid number for the humidity threshold!');
+					return;
+				}
+				$.ajax({
+					url: '/farm/sensor',
+					type: 'GET',
+					success: function (data) {
+						var readings = JSON.parse(data);
+						var i = 0;
+
+						function showAlert() {
+							if (i < readings.length) {
+								if (readings[i][4] > humidityThreshold) {
+									var confirmAlert = confirm('Alert, this day ' + readings[i][0] + ' a humidity of: ' + readings[i][4] + '! Do you want to continue receiving alerts for values that exceed the threshold?');
+									if (confirmAlert) {
+										i++;
+										showAlert();
+									}
+								} else {
+									i++;
+									showAlert();
+								}
+							} else {
+								var confirmAlert = confirm('No humidity readings exceeded the threshold! Do you want to continue receiving alerts for values that exceed the threshold?');
+								if (confirmAlert) {
+									i = 0;
+									showAlert();
+								}
+							}
+						}
+
+						showAlert();
+					}
+				});
+			});
+			$('#precipitation-btn').click(function () {
+				var precipitationThreshold = parseFloat($('#precipitation-threshold').val());
+				if (isNaN(precipitationThreshold)) {
+					alert('Please enter a valid number for the precipitation threshold!');
+					return;
+				}
+				$.ajax({
+					url: '/farm/sensor',
+					type: 'GET',
+					success: function (data) {
+						var readings = JSON.parse(data);
+						var i = 0;
+
+						function showAlert() {
+							if (i < readings.length) {
+								if (readings[i][5] > precipitationThreshold) {
+									var confirmAlert = confirm('Alert, this day ' + readings[i][0] + ' a precipitation of: ' + readings[i][5] + '! Do you want to continue receiving alerts for values that exceed the threshold?');
+									if (confirmAlert) {
+										i++;
+										showAlert();
+									}
+								} else {
+									i++;
+									showAlert();
+								}
+							} else {
+								var confirmAlert = confirm('No precipitation readings exceeded the threshold! Do you want to continue receiving alerts for values that exceed the threshold?');
+								if (confirmAlert) {
+									i = 0;
+									showAlert();
+								}
+							}
+						}
+
+						showAlert();
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

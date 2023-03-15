@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="refresh" content="5" >
+  <head>
+    <title>Precipitation</title>
+    <style>
+      body {
+        background-image: url('https://images4.alphacoders.com/600/600599.jpg');
+        background-size: cover;
+        color: white;
+      }
+		h1 {
+			color: black;
+			text-align: center;
+			margin-top: 50px;
+			font-size: 50px;
+			text-shadow: 1px 1px #555;
+		}
+		p {
+			color: black;
+            text-align: center;
+			font-size: 24px;
+			margin-top: 20px;
+		}
+      .btn {
+			background-color: #000000;
+			color: white;
+			padding: 8px 18px;
+			text-align: center;
+			font-size: 16px;
+			margin: 10px;
+			cursor: pointer;
+			border: none;
+			border-radius: 5px;
+		}
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable({{data|safe}});
+
+        var options = {
+          title: 'Precipitation',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          backgroundColor: 'transparent',
+          colors: ['#00008B'],
+          hAxis: {textStyle: {color: '#000000'}},
+          vAxis: {textStyle: {color: '#000000'}},
+          titleTextStyle: {color: '#000000'}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Precipitation Graph</h1>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+    <br>
+	<br>
+	<br>
+    <div class="btn-container">
+		<a href="/main" class="btn">Main Page</a>
+		<a href="/graph" class="btn">All Graphs</a>
+		<a href="/logout" class="btn">Logout</a>
+	</div>
+  </body>
+</html>
